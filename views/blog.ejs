@@ -17,7 +17,14 @@
       <% for (var i = 0; i < user.blogPosts.length; i++) { %>
         <a href="/blogs/<%= user.username %>/<%= user.blogPosts[i]._id %>" class="post-preview-link">
           <h4><%= user.blogPosts[i].title %></h4>
-          <p class="post-timestamp">Posted <span class="date-time"><%= user.blogPosts[i].posted %></span> | <%= user.blogPosts[i].comments.length %> Comments</p>
+          <p class="post-timestamp">
+            Posted <span class="date-time"><%= user.blogPosts[i].posted %></span> |
+            <% if (user.blogPosts[i].allowComments == true) { %>
+              <%= user.blogPosts[i].comments.length %> Comments
+            <% } else { %>
+              Comments disabled
+            <% } %>
+          </p>
           <p class="post-body-preview"><%= user.blogPosts[i].body.substr(0,5) %>...</p>
           <p>View full post</p>
         </a>

@@ -2,8 +2,13 @@
   <nav>
     <a href="/">Homepage</a>
     <div class="">
-      <a href="/blogs/new-post">New Post</a>
-      <a href="/profile" title="signout and profile link">Profile / sign in</a>
+      <% if (user) { %>
+        <a href="/blogs/new-post">New Post</a>
+        <a href="/blogs/<%= user.username %>">My Blog</a>
+        <a href="/profile" title="signout and profile link">Account</a>
+      <% } else { %>
+        <a href="/auth/login">Login / Register</a>
+      <% } %>
     </div>
   </nav>
 </header>

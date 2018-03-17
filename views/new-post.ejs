@@ -13,13 +13,39 @@
     <form>
       <label for="title">Title</label>
       <input type="text" name="title" id="title" value="" placeholder="Title">
-      <label for="post-body">Your post text</label>
-      <textarea name="post-body" id="post-body"></textarea>
-      <label for="allow-comments">Allow comments?</label>
-      <input type="checkbox" name="allow-comments" id="allow-comments">
-      <button type="submit" name="button">Create new post</button>
+      <label for="body">Your post text</label>
+      <textarea name="body" id="body"></textarea>
+      <label for="allowComments">Allow comments?</label>
+      <input type="checkbox" name="allowComments" id="allowComments" checked>
+      <button type="submit">Create new post</button>
     </form>
 
   </div>
+  <script type="text/javascript">
+      document.querySelector('form').onsubmit = function() {
+        var titleValue = document.getElementById('title').value;
+        var bodyValue = document.getElementById('body').value;
+        var commentValue = document.getElementById('allowComments').checked;
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST", "/blogs/new-post", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send(JSON.stringify({
+          title: titleValue,
+          body: bodyValue,
+          allowComments: commentValue
+        }));
+
+        xhttp.onload = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(xhttp.responseText);
+            console.log(data);
+            window.location = 'http://localhost:3000/blogs/' + data.username;
+          }
+        }
+        return false;
+      }
+    </script>
 </body>
 </html>

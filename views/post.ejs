@@ -25,11 +25,17 @@
           </div>
         <% } %>
       </div>
-      <form>
-        <p>Write a new comment!</p>
-        <textarea></textarea>
-        <button type="submit" name="button">Post comment</button>
-      </form>
+      <% if (user) { %>
+        <form action="/blogs/<%= username %>/<%= post._id %>" method="post">
+          <label>Write a new comment!</label>
+          <input type="hidden" name="author" value="<%= user.username %>">
+          <textarea name="body"></textarea>
+          <button type="submit" name="button">Post comment</button>
+        </form>
+      <% } else { %>
+        <a href="/auth/login">Login / Register to comment on this post!</a>
+      <% } %>
+
     <% } else { %>
       <div class="comments-container">
         <p>Comments: </p>

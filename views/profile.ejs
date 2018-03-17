@@ -10,10 +10,37 @@
 <body>
   <% include partials/header %>
   <div class="body-container">
-    <h1>Username</h1>
-    <p>Bio and Edit bio</p>
-    <p>Sign out</p>
+    <h1>Hello <%= user.username %></h1>
+    <a href="/auth/logout">Logout</a>
+    <br><br><br>
+    <form>
+      <label for="bio-field">My bio</label>
+      <textarea name="bio-field" id="bio-field"><%= user.bio %></textarea>
+      <button type="submit">Update bio</button>
+    </form>
+
 
   </div>
+  <script type="text/javascript">
+      document.querySelector('form').onsubmit = function() {
+        var bioInputValue = document.getElementById('bio-field').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST", "/profile", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send(JSON.stringify({
+          bio: bioInputValue
+        }));
+
+        xhttp.onload = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(xhttp.responseText);
+            console.log(data);
+          }
+        }
+        return false;
+      }
+    </script>
 </body>
 </html>

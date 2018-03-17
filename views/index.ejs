@@ -11,7 +11,9 @@
   <% include partials/header %>
   <div class="body-container">
     <h1>Test homepage</h1>
-    <a href="/auth/signin">Sign up Today!</a>
+    <% if (!user) { %>
+      <a href="/auth/register">Sign up Today!</a>
+    <% } %>
     <p>Check out these cool bloggers!</p>
     <div class="bloggers-container">
       <% for (var i = 0; i < data.length; i++) { %>
