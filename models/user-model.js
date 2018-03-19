@@ -48,7 +48,19 @@ const userSchema = new Schema({
 
 
 //hashing a password before saving it to the database
-userSchema.pre('save', function (next) {
+// userSchema.pre('save', function (next) {
+//   console.log('pre save called');
+//   var user = this;
+//   bcrypt.hash(user.password, 10, function (err, hash) {
+//     if (err) {
+//       return next(err);
+//     }
+//     user.password = hash;
+//     next();
+//   })
+// });
+
+userSchema.methods.encryptPW = function (next) {
   console.log('pre save called');
   var user = this;
   bcrypt.hash(user.password, 10, function (err, hash) {
@@ -56,9 +68,9 @@ userSchema.pre('save', function (next) {
       return next(err);
     }
     user.password = hash;
-    next();
+    return user;
   })
-});
+};
 
 // userSchema.methods.validPassword = function( pwd ) {
 //     // EXAMPLE CODE!

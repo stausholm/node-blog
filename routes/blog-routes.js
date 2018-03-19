@@ -67,7 +67,7 @@ router.post('/:user/:postId', authCheck, urlencodedParser, (req, res) => {
   User.findOne({username: req.params.user}).then((userFound) => {
     var blogPost = userFound.blogPosts.id(req.params.postId);
     blogPost.comments.push(req.body);
-    userFound.update().then((record)=> {
+    userFound.save().then((record)=> {
       console.log('comment added');
       res.render('post', {post: blogPost, username: userFound.username, user: req.user});
     })

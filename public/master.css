@@ -17,6 +17,9 @@ nav {
   height: 60px;
   padding: 0 20px;
 }
+nav div a {
+  margin-left: 20px;
+}
 .body-container {
   max-width: 1140px;
   margin: 0 auto;

@@ -88,11 +88,24 @@ app.get('/', (req, res) => {
 app.get('/profile', authCheck, (req, res) => {
   res.render('profile', {user: req.user});
 });
+// app.post('/profile', authCheck, jsonParser, (req, res) => {
+//   User.findByIdAndUpdate({_id: req.user.id}, req.body,).then((updatedUser) => {
+//     console.log('updated user');
+//     res.send(updatedUser);
+//   });
+// });
 app.post('/profile', authCheck, jsonParser, (req, res) => {
-  User.findByIdAndUpdate({_id: req.user.id}, req.body).then((updatedUser) => {
-    console.log('updated user');
-    res.send(updatedUser);
-  });
+  User.findByIdAndUpdate(req.user.id, {
+    $set: {
+      bio: req.body.bio
+    }
+  },(err, data) => {
+    if (err) {
+      res.send('error updating bio')
+    } else {
+      res.send(data);
+    }
+  })
 });
 
 
