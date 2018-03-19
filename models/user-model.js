@@ -48,21 +48,22 @@ const userSchema = new Schema({
 
 
 //hashing a password before saving it to the database
-// userSchema.pre('save', function (next) {
-//   var user = this;
-//   bcrypt.hash(user.password, 10, function (err, hash) {
-//     if (err) {
-//       return next(err);
-//     }
-//     user.password = hash;
-//     next();
-//   })
-// });
+userSchema.pre('save', function (next) {
+  console.log('pre save called');
+  var user = this;
+  bcrypt.hash(user.password, 10, function (err, hash) {
+    if (err) {
+      return next(err);
+    }
+    user.password = hash;
+    next();
+  })
+});
 
-userSchema.methods.validPassword = function( pwd ) {
-    // EXAMPLE CODE!
-    return ( this.password === pwd );
-};
+// userSchema.methods.validPassword = function( pwd ) {
+//     // EXAMPLE CODE!
+//     return ( this.password === pwd );
+// };
 
 
 const User = mongoose.model('user', userSchema);

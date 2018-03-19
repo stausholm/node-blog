@@ -28,20 +28,20 @@ passport.use(new LocalStrategy(
         console.log('incorrect username');
         return done(null, false, { message: 'Incorrect username.' });
       }
-      if (!user.validPassword(password)) {
-        console.log('incorrect password');
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      // bcrypt.compare(password, user.password, function(err, isMatch) {
-      //   if (err) throw err;
-      //   if (!isMatch) {
-      //     console.log('incorrect password');
-      //  		return done(null, false, {message: 'Invalid password'});
-      //   }
-      //   console.log(user);
-      //   return done(null, user);
-      // })
-      return done(null, user);
+      // if (!user.validPassword(password)) {
+      //   console.log('incorrect password');
+      //   return done(null, false, { message: 'Incorrect password.' });
+      // }
+      bcrypt.compare(password, user.password, function(err, isMatch) {
+        if (err) throw err;
+        if (!isMatch) {
+          console.log('incorrect password');
+       		return done(null, false, {message: 'Invalid password'});
+        }
+        console.log(user);
+        return done(null, user);
+      })
+      //return done(null, user);
     });
   }
 ));

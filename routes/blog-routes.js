@@ -28,16 +28,26 @@ router.get('/new-post', authCheck, (req, res) => {
 });
 
 router.post('/new-post', authCheck, jsonParser, (req, res) => {
-  User.findOne({_id: req.user.id}).then((user)=> {
-    user.blogPosts.push(req.body);
-    user.save().then((record)=> {
-      console.log('new post added');
-      //res.redirect(req.user.username + '/' + record._id);
-      //res.redirect(req.user.username);
-      res.send(record);
-    })
-  })
-});
+  let id = req.user.id
+    User.findByIdAndUpdate(id,{
+      $push: {
+        blogPosts: {
+          allowComments: req.body.allowComments,
+          title: req.body.title,
+          body: req.body.body
+        } }
+        }, {
+          upsert:true
+        }, (err, data) => {
+          if (err) {
+            res.send('error posting a new post');
+          } else {
+            console.log('in redirect');
+            //res.redirect('/blogs/' + req.user.username);
+            res.send(data);
+          }
+        })
+  });
 
 
 router.get('/:user', (req, res, next) => {
@@ -57,11 +67,35 @@ router.post('/:user/:postId', authCheck, urlencodedParser, (req, res) => {
   User.findOne({username: req.params.user}).then((userFound) => {
     var blogPost = userFound.blogPosts.id(req.params.postId);
     blogPost.comments.push(req.body);
-    userFound.save().then((record)=> {
+    userFound.update().then((record)=> {
       console.log('comment added');
       res.render('post', {post: blogPost, username: userFound.username, user: req.user});
     })
   })
 })
+
+
+// router.post('/:user/:postId', authCheck, urlencodedParser, (req, res) => {
+//   User.findOne({username: req.params.user}).then((userFound) => {
+//     User.findByIdAndUpdate(userFound._id,{
+//       $push: {
+//         comments: {
+//           author: req.user.username,
+//           body: req.body.body
+//         } }
+//         }, {
+//           upsert:true
+//         }, (err, data) => {
+//           if (err) {
+//             res.send('error posting a new comment');
+//           } else {
+//             console.log('in redirect');
+//             res.redirect('/');
+//             //res.send(data);
+//           }
+//         })
+//   })
+// })
+
 
 module.exports = router;
